@@ -35,14 +35,14 @@
             { title: 'Last day working at EK3', endDate: 'December 11 2015 17:00:00 UTC-0500' },
             { title: 'Flying to Mexico with friends', endDate: 'December 14 2015 06:30:00 UTC-0500' },
             { title: 'Packing the moving truck', endDate: 'December 23 2015 12:00:00 UTC-0500' },
-            { title: 'Flying to California with li\'l tt', endDate: 'December 28 2015 16:49:00 UTC-0500' },
+            { title: 'Flying to California with Kat', endDate: 'December 28 2015 16:49:00 UTC-0500' },
             { title: 'Start working at Blizzard', endDate: 'January 04 2016 09:00:00 UTC-0500' }
         ];
         
         var units = ['days', 'hours', 'minutes', 'seconds', 'deciseconds'];
         
-        function getTimeRemaining(endtime) {
-            var t = Date.parse(endtime) - new Date().getTime();
+        function getTimeRemaining(end) {
+            var t = Date.parse(end) - new Date().getTime();
             var deciseconds = Math.floor( (t/100) % 60 );
             var seconds = Math.floor( (t/1000) % 60 );
             var minutes = Math.floor( (t/1000/60) % 60 );
@@ -59,7 +59,6 @@
         }
         
         function addClock(clock) {
-            
             var clockDiv = document.createElement('div');
             clockDiv.className = 'clock';
             
