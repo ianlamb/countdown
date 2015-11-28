@@ -1,28 +1,107 @@
 <html>
 <head>
-<title>Milestone Countdown</title>
-<link href="style.css" rel="stylesheet" />
+    <title>Milestone Countdowns</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: sans-serif; text-align: center; background: #007092; }
+        h1 { margin: 40px 0px 20px; font-size: 40px; color: rgba(0,0,0,.4); }
+        .clock { display: block; font-size: 30px; text-align: center; color: rgba(255,255,255,.95); }
+        .clock > h3 { margin-bottom: 0; font-size: 24px; color: rgba(0,0,0,.4); }
+        .clock > div { display: inline-block; padding: 10px; margin: 10px; width: 90px; border-radius: 3px; background: rgba(255,255,255,.2); }
+        .clock > div > span { display: block; width: 100%; padding: 5px; border-radius: 3px; font-size: 36px; background: rgba(255,255,255,.2); }
+        .clock > div:after { display: block; padding-top: 5px; font-size: 12px; }
+        .clock > div.days:after { content: 'Days'; }
+        .clock > div.hours:after { content: 'Hours'; }
+        .clock > div.minutes:after { content: 'Minutes'; }
+        .clock > div.seconds:after { content: 'Seconds'; }
+        .clock > div.deciseconds:after { content: 'Deciseconds'; }
+        .footer { margin: 10px; }
+        .footer > a { text-decoration: none; color: rgba(255,255,255,.4); transition: all .15s ease-in-out; }
+        .footer > a:hover { color: rgba(255,255,255,.8) }
+    </style>
 </head>
 <body>
-<h1>Last day working at EK3</h1>
-<div id="clockdiv">
-  <div>
-    <span class="days"></span>
-    <div class="smalltext">Days</div>
-  </div>
-  <div>
-    <span class="hours"></span>
-    <div class="smalltext">Hours</div>
-  </div>
-  <div>
-    <span class="minutes"></span>
-    <div class="smalltext">Minutes</div>
-  </div>
-  <div>
-    <span class="seconds"></span>
-    <div class="smalltext">Seconds</div>
-  </div>
-</div>
-<script src="main.js"></script>
+    <h1>Milestone Countdowns</h1>
+    <div class="clocks"></div>
+    <div class="footer">
+        <a href="http://ianlamb.com" class="shameless-plug">Ian Lamb</a>
+    </div>
+    
+    <script>
+        var clocks = [
+            { title: 'Last day working at EK3', endDate: 'December 11 2015 17:00:00 UTC-0500' },
+            { title: 'Flying to Mexico with friends', endDate: 'December 14 2015 06:30:00 UTC-0500' },
+            { title: 'Packing the moving truck', endDate: 'December 23 2015 12:00:00 UTC-0500' },
+            { title: 'Flying to California with li\'l tt', endDate: 'December 28 2015 16:49:00 UTC-0500' },
+            { title: 'Start working at Blizzard', endDate: 'January 04 2016 09:00:00 UTC-0500' }
+        ];
+        
+        var units = ['days', 'hours', 'minutes', 'seconds', 'deciseconds'];
+        
+        function getTimeRemaining(endtime) {
+            var t = Date.parse(endtime) - new Date().getTime();
+            var deciseconds = Math.floor( (t/100) % 60 );
+            var seconds = Math.floor( (t/1000) % 60 );
+            var minutes = Math.floor( (t/1000/60) % 60 );
+            var hours = Math.floor( (t/(1000*60*60)) % 24 );
+            var days = Math.floor( t/(1000*60*60*24) );
+            return {
+                'total': t,
+                'days': days,
+                'hours': hours,
+                'minutes': minutes,
+                'seconds': seconds,
+                'deciseconds': deciseconds
+            };
+        }
+        
+        function addClock(clock) {
+            
+            var clockDiv = document.createElement('div');
+            clockDiv.className = 'clock';
+            
+            var clockTitle = document.createElement('h3');
+            clockTitle.innerHTML = clock.title;
+            clockDiv.appendChild(clockTitle);
+            
+            for (var index in units) {
+                var countDiv = document.createElement('span');
+                var unitDiv = document.createElement('div');
+                unitDiv.className = units[index];
+                unitDiv.appendChild(countDiv);
+                clockDiv.appendChild(unitDiv);
+            }
+            
+            document.querySelector('.clocks').appendChild(clockDiv);
+            
+            var days = clockDiv.querySelector('.days span');
+            var hours = clockDiv.querySelector('.hours span');
+            var minutes = clockDiv.querySelector('.minutes span');
+            var seconds = clockDiv.querySelector('.seconds span');
+            var deciseconds = clockDiv.querySelector('.deciseconds span');
+        
+            function updateClock() {
+                var t = getTimeRemaining(clock.endDate);
+                
+                if (t.total <= 0){
+                    clearInterval(interval);
+                    t.days = t.hours = t.minutes = t.seconds = 0;
+                }
+                
+                days.innerHTML = t.days;
+                hours.innerHTML = ('0' + t.hours).slice(-2);
+                minutes.innerHTML = ('0' + t.minutes).slice(-2);
+                seconds.innerHTML = ('0' + t.seconds).slice(-2);
+                deciseconds.innerHTML = ('' + t.deciseconds).slice(-1);
+            }
+            
+            updateClock();
+            var interval = setInterval(updateClock, 100);
+        }
+        
+        for (var index in clocks) {
+            addClock(clocks[index]);
+        }
+    </script>
 </body>
 </html>
