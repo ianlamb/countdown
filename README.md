@@ -1,3 +1,5 @@
 # countdown
 
-Just a quick set of timers I made for some sweet milestones coming up. Will probably be outdated soon, but good reference material.
+*Five milestones, five countdowns, 100 lines of code.*
+
+The data will probably be outdated shortly, but the logic for handling n timers will live on.
